@@ -18,6 +18,7 @@ always @(posedge clk or negedge clk or clr_FlushD) begin
     //     PCP4_D <= PCP4;
     // end
     if (~En_StallD or rst) begin
+        #1;
         InstrD <= InstrIn;
         PC_D <= PC;
         PCP4_D <= PCP4;
@@ -55,6 +56,7 @@ module DecodeExecute (
 );
 always @(posedge clk or negedge clk) begin
     if (~clr_FlushE) begin
+        #1;
         RA_E <= RA_D;
         RB_E <= RB_D;
         PC_E <= PC_D;
@@ -95,8 +97,9 @@ module Control_DE (
     output reg [2:0] ALUControlE,
     output reg ALUSrcE);
 always @(posedge clk or negedge clk) begin
-   RegWriteE <= RegWriteD;
-   ResultSrcE <= ResultSrcD;
+    #1;
+    RegWriteE <= RegWriteD;
+    ResultSrcE <= ResultSrcD;
     MemWriteE <= MemWriteD;
     JumpE <= JumpD;
     BranchE <= BranchD;
@@ -118,6 +121,7 @@ module ExecuteMemory (
     output reg [31:0] PCP4_M
 );
 always @(posedge clk or negedge clk) begin
+    #1;
     ALUResult_M <= ALUResult_E;
     WriteData_M <= WriteData_E;
     D_M <= D_E;
@@ -135,6 +139,7 @@ module Control_EM (
     output reg MemWriteM
 );
 always @(posedge clk or negedge clk) begin
+    #1;
     RegWriteM <= RegWriteE;
     ResultSrcM <= ResultSrcE;
     MemWriteM <= MemWriteE;
@@ -155,6 +160,7 @@ module MemoryWriteback (
     output reg [31:0] PCP4_WB
 );
 always @(posedge clk or negedge clk) begin
+    #1;
     ALUResult_WB <= ALUResult_M;
     DMEMDataOut <= DMEMDataIn;
     D_WB <= D_M;
@@ -170,6 +176,7 @@ module Control_MW (
     output reg [1:0] ResultSrcW
 );
 always @(posedge clk or negedge clk) begin
+    #1;
     RegWriteW <= RegWriteM;
     ResultSrcW <= ResultSrcM;
 end

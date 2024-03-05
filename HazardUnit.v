@@ -12,18 +12,18 @@ module Forwarding (
 // reg [4:0] oldB_E;
 always @(*) begin
     if ((D_M == A_E) && (RegWriteM) && (A_E != 0)) begin
-        ForwardA = 2'b10;
+        #1 ForwardA = 2'b10;
     end else if ((D_WB == A_E) && (RegWriteW) && (A_E != 0)) begin
-        ForwardA = 2'b01;
+        #1 ForwardA = 2'b01;
     end else begin
-        ForwardA = 2'b00;
+        #1 ForwardA = 2'b00;
     end
     if ((D_M == B_E) && (RegWriteM) && (B_E != 0)) begin
-        ForwardB = 2'b10;
+        #1 ForwardB = 2'b10;
     end else if ((D_WB == B_E) && (RegWriteW) && (B_E != 0)) begin
-        ForwardB = 2'b01;
+        #1 ForwardB = 2'b01;
     end else begin
-        ForwardB = 2'b00;
+        #1 ForwardB = 2'b00;
     end
 end
 endmodule

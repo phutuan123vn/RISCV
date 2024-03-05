@@ -5,8 +5,8 @@ module PC (
     output reg [31:0] PCout
 );
 always @(posedge clk) begin
-    if (rst) PCout <= 32'b0;
-    else PCout <= PCin;
+    if (rst) #1 PCout <= 32'b0;
+    else #1 PCout <= PCin;
 end
 endmodule
 
@@ -34,7 +34,7 @@ module PC_Pipe (
     output reg [31:0] PCOut
 );
 always @(posedge clk or negedge clk) begin
-    if (rst) PCOut <= 32'b0;
-    else if (~EN) PCOut <= PCIn;
+    if (rst) #1 PCOut <= 32'b0;
+    else if (~EN) #1 PCOut <= PCIn;
 end 
 endmodule

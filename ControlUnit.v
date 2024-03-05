@@ -13,30 +13,30 @@ always @(op) begin
     case (op)
         7'b0000011://lw
             begin
-            RegWrite = 1; ImmSrc = 2'b00; AluSrc = 1; MemWrite = 0; ResultSrc = 1; Branch = 0; ALUOp = 2'b00; Jump = 0;
+            #1 RegWrite = 1; ImmSrc = 2'b00; AluSrc = 1; MemWrite = 0; ResultSrc = 1; Branch = 0; ALUOp = 2'b00; Jump = 0;
             end
         7'b0100011://sw
             begin
-            RegWrite = 0; ImmSrc = 2'b01; AluSrc = 1; MemWrite = 1; ResultSrc = 'x; Branch = 0; ALUOp = 2'b00; Jump = 0;
+            #1 RegWrite = 0; ImmSrc = 2'b01; AluSrc = 1; MemWrite = 1; ResultSrc = 'x; Branch = 0; ALUOp = 2'b00; Jump = 0;
             end
         7'b0110011://R type
             begin
-            RegWrite = 1; ImmSrc = 2'bxx; AluSrc = 0; MemWrite = 0; ResultSrc = 0; Branch = 0; ALUOp = 2'b10; Jump = 0;
+            #1 RegWrite = 1; ImmSrc = 2'bxx; AluSrc = 0; MemWrite = 0; ResultSrc = 0; Branch = 0; ALUOp = 2'b10; Jump = 0;
             end
         7'b1100011://branch
             begin
-            RegWrite = 0; ImmSrc = 2'b10; AluSrc = 0; MemWrite = 0; ResultSrc = 'x; Branch = 1; ALUOp = 2'b01; Jump = 0;
+            #1 RegWrite = 0; ImmSrc = 2'b10; AluSrc = 0; MemWrite = 0; ResultSrc = 'x; Branch = 1; ALUOp = 2'b01; Jump = 0;
             end
         7'b0010011://I type
             begin
-            RegWrite = 1; ImmSrc = 2'b00; AluSrc = 1; MemWrite = 0; ResultSrc = 0; Branch = 0; ALUOp = 2'b10; Jump = 0;
+            #1 RegWrite = 1; ImmSrc = 2'b00; AluSrc = 1; MemWrite = 0; ResultSrc = 0; Branch = 0; ALUOp = 2'b10; Jump = 0;
             end
         7'b1101111://jal
             begin
-            RegWrite = 1; ImmSrc = 2'b11; AluSrc = 'x; MemWrite = 0; ResultSrc = 2'b10; Branch = 0; ALUOp = 2'bxx; Jump = 1;
+            #1 RegWrite = 1; ImmSrc = 2'b11; AluSrc = 'x; MemWrite = 0; ResultSrc = 2'b10; Branch = 0; ALUOp = 2'bxx; Jump = 1;
             end
         default: begin
-            RegWrite = 'z; ImmSrc = 2'bz; AluSrc = 'z; MemWrite = 'z; ResultSrc = 'z; Branch = 'z; ALUOp = 2'bz; Jump = 'z;
+            #1 RegWrite = 'z; ImmSrc = 2'bz; AluSrc = 'z; MemWrite = 'z; ResultSrc = 'z; Branch = 'z; ALUOp = 2'bz; Jump = 'z;
         end
     endcase
 end 
@@ -51,16 +51,16 @@ module ALUDecoder (
 );
 always @(*) begin
     casex ({ALUOp,funct3,op5,funct7b5})
-        {2'b00,{5{1'bx}}}: ALUControl = 3'b000;
-        {2'b01,{5{1'bx}}}: ALUControl = 3'b001;
+        {2'b00,{5{1'bx}}}: #1 ALUControl = 3'b000;
+        {2'b01,{5{1'bx}}}: #1 ALUControl = 3'b001;
         {2'b10,3'b000,2'b00},
         {2'b10,3'b000,2'b01},
-      	{2'b10,3'b000,2'b10}: ALUControl = 3'b000; // ALU OUT
-        {2'b10,3'b000,2'b11}: ALUControl = 3'b001;
-        {2'b10,3'b010,2'bxx}: ALUControl = 3'b101;
-        {2'b10,3'b110,2'bxx}: ALUControl = 3'b011;
-        {2'b10,3'b111,2'bxx}: ALUControl = 3'b010;
-        default: ALUControl = 3'bz;
+      	{2'b10,3'b000,2'b10}: #1 ALUControl = 3'b000; // ALU OUT
+        {2'b10,3'b000,2'b11}: #1 ALUControl = 3'b001;
+        {2'b10,3'b010,2'bxx}: #1 ALUControl = 3'b101;
+        {2'b10,3'b110,2'bxx}: #1 ALUControl = 3'b011;
+        {2'b10,3'b111,2'bxx}: #1 ALUControl = 3'b010;
+        default: #5 ALUControl = 3'bz;
     endcase
 end
 endmodule
